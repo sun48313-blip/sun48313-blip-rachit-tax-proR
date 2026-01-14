@@ -1,3 +1,4 @@
+https://github.com/sun48313-blip/sun48313-blip-rachit-tax-proR/blob/main/main.py
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -32,6 +33,8 @@ def itr(request: Request):
 @app.get("/clients", response_class=HTMLResponse)
 def clients(request: Request):
     return templates.TemplateResponse("clients.html", {"request": request})
+ 
+ 
  
 
  
