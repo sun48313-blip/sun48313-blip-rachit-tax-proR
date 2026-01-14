@@ -16,3 +16,6 @@ def home(request: Request):
 @app.get("/login", response_class=HTMLResponse)
 def login(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
+@app.get("/gst", response_class=HTMLResponse)
+def gst(request: Request):
+    return templates.TemplateResponse("gst.html", {"request": request})
