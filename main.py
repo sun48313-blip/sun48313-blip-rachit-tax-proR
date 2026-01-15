@@ -1,8 +1,5 @@
-from fastapi import FastAPI, Request, Form
+ from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
-from database import create_tables, get_db
-from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -15,30 +12,60 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 
+# ================= HOME / DASHBOARD =================
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
-    return templates.TemplateResponse("home.html", {"request": request})
+    return templates.TemplateResponse(
+        "home.html",
+        {"request": request, "message": "Login successful"}
+    )
 
 
+# ================= LOGIN PAGE =================
 @app.get("/login", response_class=HTMLResponse)
-def login(request: Request):
-    return templates.TemplateResponse("login.html", {"request": request})
+def login_page(request: Request):
+    return templates.TemplateResponse(
+        "login.html",
+        {"request": request, "error": None}
+    )
 
 
+# ================= LOGIN POST (IMPORTANT) =================
+@app.post("/login")
+def login_post(
+    request: Request,
+    username: str = Form(...),
+    password: str = Form(...)
+):
+    # TEMP login (later DB से करेंगे)
+    if username == "admin" and password == "1234":
+        return RedirectResponse(url="/", status_code=303)
+
+    return templates.TemplateResponse(
+        "login.html",
+        {
+            "request": request,
+            "error": "Invalid username or password"
+        }
+    )
+
+
+# ================= GST =================
 @app.get("/gst", response_class=HTMLResponse)
 def gst(request: Request):
     return templates.TemplateResponse("gst.html", {"request": request})
 
 
+# ================= ITR =================
 @app.get("/itr", response_class=HTMLResponse)
 def itr(request: Request):
     return templates.TemplateResponse("itr.html", {"request": request})
 
 
+# ================= CLIENTS =================
 @app.get("/clients", response_class=HTMLResponse)
 def clients(request: Request):
     return templates.TemplateResponse("clients.html", {"request": request})
-    create_tables()
 
 
  
