@@ -1,3 +1,6 @@
+from fastapi import FastAPI, Request, Form
+from fastapi.responses import HTMLResponse, RedirectResponse
+from database import create_tables, get_db
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -35,6 +38,8 @@ def itr(request: Request):
 @app.get("/clients", response_class=HTMLResponse)
 def clients(request: Request):
     return templates.TemplateResponse("clients.html", {"request": request})
+    create_tables()
+
 
  
  
