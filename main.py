@@ -37,9 +37,36 @@ def login_post(
     username: str = Form(...),
     password: str = Form(...)
 ):
-    # TEMP login (later DB से करेंगे)
-    if username == "admin" and password == "1234":
-        return RedirectResponse(url="/", status_code=303)
+     from database import get_db
+
+@app.post("/login")
+def login_post(
+    request: Request,
+    username: str = Form(...),
+    password: str = Form(...)
+):
+    conn = get_db()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT * FROM users WHERE username=? AND password=?",
+        (username, password)
+    )
+    user = cursor.fetchone()
+    conn.close()
+
+    if user:
+        request.session["user"] = username
+        return RedirectResponse("/", status_code=303)
+
+    return templates.TemplateResponse(
+        "login.html",
+        {
+            "request": request,
+            "error": "Invalid username or password"
+        }
+    )
+
 
     return templates.TemplateResponse(
         "login.html",
